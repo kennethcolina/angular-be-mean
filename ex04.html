@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="BeMEAN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>{{ nome }}</title>
+</head>
+
+<body ng-controller="UserController">
+    <h1>{{ titulo }}</h1>
+    <div class="div">
+        <label for="nome">Seu nome:
+            <input type="text" ng-model="nome">
+        </label>
+        <span>Nome: {{ nome | uppercase }}</span>
+
+        <label for="idade">Sua idade:
+            <input type="text" ng-model="idade">
+        </label>
+        <span>Idade: {{idade }}</span>
+
+        <label for="Time">Seu time:
+            <input type="text" ng-model="time">
+        </label>
+        <span>Time: {{time }} </span>
+
+        <ul>
+            <li ng-repeat="user in users">
+                {{ user.name }} - {{ user.email}}
+            </li>
+        </ul>
+
+
+    </div>
+
+    <div ng-controller="CourseController">
+        <h2>{{titulo}}</h2>
+        <ul>
+            <li ng-repeat="curso in cursos">
+                {{ curso.name }} - {{ curso.teacher}}
+            </li>
+        </ul>
+    </div>
+
+        <script src="angular.min.js"></script>
+        <script>
+            angular.module("BeMEAN", [])
+                .controller('UserController', UserController)
+                .controller('CourseController', CourseController)
+                .controller('TeachersController', TeachersController);
+
+            function UserController($scope) {
+                $scope.titulo = "Be MEAN";
+                $scope.users = [{
+                    name: "Kenneth",
+                    email: "kcolina@sistemas.ufla.br"
+                }, {
+                    name: "Kenneth Santos",
+                    email: "kenneth.santos@gt4w.com.br"
+                }, {
+                    name: "Kenneth Colina",
+                    email: "kennethcolina@gmail.com"
+                }];
+            }
+
+            UserController['$inject'] = ['$scope'];
+
+            function CourseController($scope) {
+                $scope.titulo = "Be MEAN - CURSOS";
+                $scope.cursos = [{
+                    name: "NODE JS",
+                    teacher: "Kenneth Colina"
+                }, {
+                    name: "RAILS",
+                    teacher: "Kenneth Santos"
+                }, {
+                    name: "VUE.JS",
+                    teacher: "Matheus Ferreira"
+                }];
+            }
+
+            CourseController['$inject'] = ['$scope'];
+        </script>
+</body>
+
+</html>

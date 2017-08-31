@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="BeMEAN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="style.css">
+
+    <title>{{ nome }}</title>
+</head>
+
+<body>
+    <div class="div">
+        <label for="nome">Seu nome:
+        <input type="text" ng-model="nome">
+    </label>
+        <span>Nome: {{ nome | uppercase }}</span>
+
+        <label for="idade">Sua idade:
+        <input type="text" ng-model="idade">
+    </label>
+        <span>Idade: {{idade | input}}</span>
+
+        <label for="Time">Seu time:
+        <input type="text" ng-model="time">
+    </label>
+        <span>Time: {{time | truncate }} </span>
+    </div>
+
+    <script src="angular.min.js"></script>
+    <script>
+        angular.module("BeMEAN", [])
+            .filter('reverserString', function () {
+                return function (text) {
+                    if (text) return text.split("").reverse().join("");
+                }
+            })
+            .filter('truncate', function () {
+                return function (text, length, end) {
+                    if (text) {
+                        if (isNaN(length)) length = 10;
+                        if (end === undefined) end = "...";
+                        if (text.length <= length) return text;
+                        else return String(text).substring(0, length) + end;
+                    }
+                }
+            })
+            .filter('input', function() {
+                return function(idade) {
+                    if(idade) {
+                        if (idade < 18) {
+                            return "menor de idade";
+                        } else {
+                            return "maior de idade";
+                        }
+                    }
+                }
+            })
+    </script>
+</body>
+
+</html>

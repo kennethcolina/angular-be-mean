@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="BeMEAN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <link rel="stylesheet" href="beMEAN.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+
+    <title>{{ User.nome }}</title>
+</head>
+
+<body ng-controller="UserController as User">
+    <div class="row wrapper">
+        <h1>{{ User.titulo }}</h1>
+        <form action="post"></form>
+        <label for="nome">Nome:
+            <input type="text" ng-model="form.User.name">
+        </label>
+        <label for="email">Email:
+            <input type="email" ng-model="form.User.email">
+        </label>
+        <label for="idade">Idade:
+            <input type="text" ng-model="form.User.idade">
+        </label>
+        </form>
+        <button type="submit" class="btn btn-large green waves-effect waves-light cols12" ng-click="User.addUser(form.User)">ADD USER</button>
+
+        <label>Busca: <input ng-model="searchUser"></label>
+
+        <p>PREDICATE: {{ User.predicate }}</p>
+        <table>
+            <thead>
+                <tr>
+                    <th ng-repeat="(key, value) in User.users[0]"> <a href="" ng-click="User.userOrderBy(key)">{{key}}</a></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="user in User.users | orderBy:User.predicate | filter:searchUser">
+                    <td ng-repeat="(key, value) in user">{{value}}</td>
+                    <td>
+                        <button type="submit" name="action" ng-click="User.removeByEmail(user.email)" class="btn btn-large red waves-effect waves-light cols12">DELETE</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div>
+            <div ng-controller="CourseController as Curso">
+                <h2>{{Curso.titulo}}</h2>
+                <label for="cursos">Busca: <input type="text" ng-model="searchCurso"></label>
+                <button ng-click="Curso.addCurso()" class="btn btn-large green waves-effect waves-light cols12">ADD CURSO</button>
+                <ul>
+                    <li ng-repeat="curso in Curso.cursos | orderBy:predicate | filter:searchCurso">
+                        <span ng-repeat="(key, value) in curso">{{value}}<span>
+                </li>
+            </ul>
+        </div>
+
+        <div ng-controller="TeachersController as Teacher">
+            <h2>{{ Teacher.titulo}}</h2>
+            <label for="professor">Busca: <input type="text" ng-model="searchProfessor"></label>
+            <ul>
+                <li ng-repeat="aula in Teacher.aulas | orderBy:predicate | filter:searchProfessor">
+
+                    {{ aula.aula }} - {{ aula.horario }} - {{ aula.sala }}
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <script src="angular.min.js"></script>
+    <script
+    src="https://code.jquery.com/jquery-3.2.1.min.js"
+    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+    crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    
+    <script>
+        angular.module("BeMEAN", [])
+            .controller('UserController', UserController)
+            .controller('CourseController', CourseController)
+            .controller('TeachersController', TeachersController);
+
+        function UserController() {
+            var vm = this;
+            vm.titulo = "Be MEAN";
+            vm.users = [{
+                name: "Kenneth",
+                email: "kcolina@sistemas.ufla.br",
+                idade: 21
+            }, {
+                name: "AKenneth Santos",
+                email: "kenneth.santos@gt4w.com.br",
+                idade: 19
+            }, {
+                name: "BKenneth Colina",
+                email: "kennethcolina@gmail.com",
+                idade: 23
+            }];
+
+            vm.addUser = function(user) {
+                console.log('user', user);
+                vm.users.push(user);
+           };
+
+           vm.userOrderBy = function(th) {
+                vm.predicate = th;
+           }
+
+           vm.removeByEmail = function(email) {
+               vm.users = vm.users.filter((el) => { return el.email !== email });
+           }
+        }
+
+        function CourseController() {
+            var vm = this;
+            vm.titulo = "Be MEAN - CURSOS";
+            vm.cursos = [{
+                name: "NODE JS",
+                teacher: "Kenneth Colina",
+                carga: 20
+            }, {
+                name: "RAILS",
+                teacher: "Kenneth Santos",
+                carga: 15
+            }, {
+                name: "VUE.JS",
+                teacher: "Matheus Ferreira",
+                carga: 25
+            }];
+
+            vm.addCurso = function() {
+                vm.cursos.push({name: "AngularJS", teacher: "Renan", carga: 30});
+            };
+        }
+
+        function TeachersController() {
+            var vm = this;
+            var date = new Date("October 13, 2014 11:13:00");
+            vm.titulo = "Professores";
+            vm.aulas = [{
+                aula: 1,
+                horario: date,
+                sala: "26"
+            }, {
+                aula: 2,
+                horario: date,
+                sala: "24"
+            }, {
+                aula: 3,
+                horario: date,
+                sala: "25"
+            }];
+        };
+    </script>
+
+</body>
+
+</html>
