@@ -21,7 +21,22 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
 }
+.bold {
+    font-weight: bold;
+}
+
+.strike {
+    text-decoration: line-through;
+}
 
 .wrapper {
     width: 600px;
+}
+
+.animate {
+    transition: all linear 0.5s;
+}
+
+.ng-hide {
+    height: 0;
 }

@@ -14,19 +14,20 @@
 
 <body ng-controller="UserController as User">
     <div class="row wrapper">
-        <h1>{{ User.titulo }}</h1>
+        <h1 ng-style="User.tituloStyle">{{ User.titulo }}</h1>
         <form action="post"></form>
         <label for="nome">
-            <input type="text" ng-model="form.User.name" placeholder="Nome">
+            <input type="text" ng-model="User.form.name" placeholder="Nome">
         </label>
         <label for="email">
-            <input type="email" ng-model="form.User.email" placeholder="Email">
+            <input type="email" ng-model="User.form.email" placeholder="Email">
         </label>
         <label for="idade">
-            <input type="text" ng-model="form.User.idade" placeholder="Idade">
+            <input type="text" ng-model="User.form.idade" placeholder="Idade">
         </label>
         </form>
-        <button type="submit" class="btn btn-large green waves-effect waves-light cols12" ng-click="User.addUser(form.User)">ADD USER</button>
+        <button ng-hide="User.editing" type="submit" class="btn btn-large green waves-effect waves-light cols12" ng-click="User.addUser(User.form)">ADD USER</button>
+        <button ng-show="User.editing" type="submit" class="btn btn-large animate blue waves-effect waves-light cols12" ng-click="User.save(User.form)">SAVE</button>
 
         <label><input ng-model="searchUser" placeholder="Busca"></label>
 
@@ -39,13 +40,14 @@
                 </tr>
             </thead>
             <tbody>
-                <tr ng-repeat="user in User.users | orderBy:User.predicate | filter:searchUser">
+                <tr ng-class="{bold: !user.selecionado, strike:user.selecionado}" ng-repeat="user in User.users | filter:searchUser track by $index">
                     <td>
-                        <input type="checkbox" name="delete"id="user-{{$index}}" ng-model="user.selecionado" >
+                        <input type="checkbox" name="delete" id="user-{{$index}}" ng-model="user.selecionado">
                         <label for="user-{{$index}}"></label>
                     </td>
                     <td ng-repeat="(key, value) in user">{{value}}</td>
-                </td>
+                    </td>
+                    <td><button ng-click="User.edit(user, $index)" class="btn blue waves-effect waves-light cols12" type="submit">EDIT</button></td>
                 </tr>
             </tbody>
         </table>
@@ -79,14 +81,12 @@
             <button type="submit" name="action" ng-click="User.removeByEmail(user.email)" class="btn btn-large red waves-effect waves-light cols12">DELETE</button>
         </td>
     <script src="angular.min.js"></script>
-    <script
-    src="https://code.jquery.com/jquery-3.2.1.min.js"
-    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.11/angular-animate.js"></script>
     
     <script>
-        angular.module("BeMEAN", [])
+        angular.module("BeMEAN", ['ngAnimate'])
             .controller('UserController', UserController)
             .controller('CourseController', CourseController)
             .controller('TeachersController', TeachersController);
@@ -94,6 +94,12 @@
         function UserController() {
             var vm = this;
             vm.titulo = "Be MEAN";
+            vm.editing = false;
+            vm.tituloStyle = {
+                "color": "#DDBB00",
+                "font-size": "100px",
+                "text-align": "center" }
+
             vm.users = [{
                 name: "Kenneth",
                 email: "kcolina@sistemas.ufla.br",
@@ -111,6 +117,7 @@
             vm.addUser = function(user) {
                 console.log('user', user);
                 vm.users.push(user);
+                vm.form = {};
            };
 
            vm.userOrderBy = function(th) {
@@ -134,6 +141,25 @@
 
            vm.remove = function(users) {
                vm.users = users.filter((el) => { return !el.selecionado });
+           }
+
+           vm.edit = function(user, index) {
+               vm.form = angular.copy(user);
+               vm.form.index = index;
+               vm.editing = true;
+           }
+
+           vm.save = function(user) {
+                var users = vm.users.map(function(el, i) {
+                    if(i === user.index) {
+                        delete user.index;
+                        console.log(user, "aqui");
+                        return user;
+                    }
+                    return el;
+                });         
+                vm.users = users;
+                vm.editing = false;
            }
         }
 
