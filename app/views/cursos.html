@@ -1,0 +1,8 @@
+<h2>{{Curso.titulo}}</h2>
+<label for="cursos"><input type="text" ng-model="searchCurso" placeholder="Busca"></label>
+<button ng-click="Curso.addCurso()" class="btn btn-large green waves-effect waves-light cols12">ADD CURSO</button>
+<ul>
+    <li ng-repeat="curso in Curso.cursos | orderBy:predicate | filter:searchCurso">
+        <span ng-repeat="(key, value) in curso">{{value}}<span>
+    </li>
+</ul>

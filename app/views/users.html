@@ -1,0 +1,40 @@
+<form action="post"></form>
+<label for="nome">
+    <input type="text" ng-model="User.form.name" placeholder="Nome">
+</label>
+<label for="email">
+    <input type="email" ng-model="User.form.email" placeholder="Email">
+</label>
+<label for="idade">
+    <input type="text" ng-model="User.form.idade" placeholder="Idade">
+</label>
+</form>
+<button ng-hide="User.editing" type="submit" class="btn btn-large green waves-effect waves-light cols12" ng-click="User.addUser(User.form)">ADD USER</button>
+<button ng-show="User.editing" type="submit" class="btn btn-large animate blue waves-effect waves-light cols12" ng-click="User.save(User.form)">SAVE</button>
+
+<label><input ng-model="searchUser" placeholder="Busca"></label>
+
+<p>PREDICATE: {{ User.predicate }}</p>
+
+<table>
+    <thead>
+        <tr>
+            <th></th>
+            <th ng-repeat="(key, value) in User.users[0]"> <a href="" ng-click="User.userOrderBy(key)">{{key}}</a></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-class="user.selecionado? 'strike' : 'bold'" ng-repeat="user in User.users | filter:searchUser track by $index">
+            <td>
+                <input type="checkbox" name="delete" id="user-{{$index}}" ng-model="user.selecionado">
+                <label for="user-{{$index}}"></label>
+            </td>
+            <td><a href="#/users/{{$index}}">{{user.name}}</a></td>
+            <td><a href="#/user/{{user.email}}">{{user.email}}</a></td>
+            </td>
+            <td><button ng-click="User.edit(user, $index)" class="btn blue waves-effect waves-light cols12" type="submit">EDIT</button></td>
+        </tr>
+    </tbody>
+</table>
+<button type="submit" name="action" ng-click="User.remove(User.users)" class="btn btn-large red waves-effect waves-light cols12">DELETE</button>
+

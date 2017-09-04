@@ -1,0 +1,12 @@
+<h2>{{ Teacher.titulo}}</h2>
+<label for="professor"><input type="text" ng-model="searchProfessor" placeholder="Busca"></label>
+<ul>
+    <li ng-repeat="aula in Teacher.aulas | orderBy:predicate | filter:searchProfessor">
+
+        {{ aula.aula }} - {{ aula.horario }} - {{ aula.sala }}
+    </li>
+</ul>
+
+<td>
+    <button type="submit" name="action" ng-click="User.removeByEmail(user.email)" class="btn btn-large red waves-effect waves-light cols12">DELETE</button>
+</td>

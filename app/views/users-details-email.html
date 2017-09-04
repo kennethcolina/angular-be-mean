@@ -1,0 +1,7 @@
+<h2 ng-init="UserDetails.user = UserDetails.getUserByEmail()[0]">Dados do Usuário</h2>
+<p>Buscar o user pelo email: {{UserDetails.routeParams.email}} </p>
+<p>
+    Nome: {{ UserDetails.user.name}}
+    <br>
+    Email: {{ UserDetails.user.email}}
+</p>
